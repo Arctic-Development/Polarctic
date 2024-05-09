@@ -1,0 +1,4 @@
+name: Polarctic
+version: '${project.version}'
+main: ac.polarctic.plugin
+authors: [ MinecraftAnticheatCommunityDiscord ]

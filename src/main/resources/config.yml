@@ -1,6 +1,2 @@
-polarctic:
-  # Placeholders:
-  # %vl%  the current check vl
-  # %check% the check for what the player failed
-  # %player% the presumed cheater
-  alert-message: "&7[&cPolarctic&7] &6%player% &fflagged &6%check% &7(%type%)&8 (&cvl: &6%vl%&8)"
+alert-message: "&8[&bArctic&8] &f%player% &b- &f%check% &cx%vl% %experimental% &7(%info%)"
+experimental-notice: "&b(*E)"

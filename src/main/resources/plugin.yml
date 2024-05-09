@@ -1,4 +1,4 @@
 name: Polarctic
-version: '${project.version}'
-main: ac.polarctic.plugin.Polarctic
-authors: [ MinecraftAnticheatCommunityDiscord ]
+version: 4.0.0-PRE-RELEASE
+main: ac.polarctic.plugin.ArcticAnticheat
+authors: [MinecraftAnticheatCommunityDiscord, Salers]

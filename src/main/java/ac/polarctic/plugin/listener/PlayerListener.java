@@ -14,11 +14,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
-        Global.INSTANCE.getPlayerDataManager().update(event.getPlayer());
+        Global.INSTANCE.getPlayerDataManager().add(event.getPlayer());
     }
 
     @EventHandler
     public void onLeave(final PlayerQuitEvent event) {
-        Global.INSTANCE.getPlayerDataManager().update(event.getPlayer());
+        Global.INSTANCE.getPlayerDataManager().remove(event.getPlayer());
     }
 }

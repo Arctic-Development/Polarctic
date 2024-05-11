@@ -30,12 +30,13 @@ public class PlayerData {
     private final Player player;
     private final User user;
 
-    @Getter
     private final List<PlayerTracker> playerTrackers = new ArrayList<>();
     private final PositionTracker positionTracker = new PositionTracker(this);
 
     private final CheckProcessor checkProcessor = new CheckProcessor(this);
     private final TrackerProcessor trackerProcessor = new TrackerProcessor(this);
+
+    private final TransactionConfirmatory transactionConfirmatory = new TransactionConfirmatory(this);
 
 
 

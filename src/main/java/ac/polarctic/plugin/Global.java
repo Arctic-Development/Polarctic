@@ -4,6 +4,8 @@ import ac.polarctic.plugin.listener.PacketEventsListener;
 import ac.polarctic.plugin.listener.PlayerListener;
 import ac.polarctic.plugin.manager.PlayerDataManager;
 import com.github.retrooper.packetevents.PacketEvents;
+import dev.thomazz.pledge.Pledge;
+import dev.thomazz.pledge.pinger.frame.FrameClientPinger;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -20,6 +22,8 @@ public enum Global {
 
     private ArcticAnticheat plugin;
     private final PlayerDataManager playerDataManager = new PlayerDataManager();
+    private Pledge pledge;
+    private FrameClientPinger frameClientPinger;
 
     public void onLoad(final ArcticAnticheat plugin) {
         this.plugin = plugin;
@@ -32,6 +36,7 @@ public enum Global {
         this.plugin.saveDefaultConfig();
         PacketEvents.getAPI().load();
         this.registerListeners();
+        this.registerPledge();
 
     }
 
@@ -43,5 +48,10 @@ public enum Global {
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this.plugin);
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
+    }
+
+    private void registerPledge() {
+        pledge = Pledge.getOrCreate(this.plugin);
+        frameClientPinger = pledge.createFramePinger(-30000, -1);
     }
 }

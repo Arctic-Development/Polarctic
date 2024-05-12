@@ -11,15 +11,15 @@ import dev.sim0n.iridium.math.statistic.Stats;
 import java.util.ArrayList;
 import java.util.List;
 
-@CheckInformation(name = "Auto Clicker A", minVL = 2)
-public class AutoClickerA extends PacketCheck {
+@CheckInformation(name = "Auto Clicker C", minVL = 2)
+public class AutoClickerC extends PacketCheck {
     private final List<Integer> samples = new ArrayList<>();
 
     private int movements;
 
-    private static final double MAX_CPS = 20;
+    private static final int OUTLIER = 3;
 
-    public AutoClickerA(PlayerData playerData) {
+    public AutoClickerC(PlayerData playerData) {
         super(playerData);
     }
 
@@ -29,11 +29,15 @@ public class AutoClickerA extends PacketCheck {
             if (movements < 10) {
                 samples.add(movements);
 
-                if (samples.size() == 30) {
+                if (samples.size() == 1000) {
+                    int outliers = (int) samples.stream()
+                            .filter(d -> d > OUTLIER)
+                            .count();
+
                     double cps = 20D / Stats.mean(samples);
 
-                    if (cps > MAX_CPS)
-                        flag(String.format("CPS %.2f", cps));
+                    if (cps > 8 && outliers < 7)
+                        flag(String.format("CPS %.2f O %s", cps, outliers));
 
                     samples.clear();
                 }

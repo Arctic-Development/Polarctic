@@ -5,8 +5,7 @@ import ac.polarctic.plugin.check.api.types.EntityInteractionCheck;
 import ac.polarctic.plugin.check.api.types.MovementCheck;
 import ac.polarctic.plugin.check.api.types.PacketCheck;
 import ac.polarctic.plugin.check.api.types.RotationCheck;
-import ac.polarctic.plugin.check.impl.autoclicker.AutoClickerA;
-import ac.polarctic.plugin.check.impl.autoclicker.AutoClickerB;
+import ac.polarctic.plugin.check.impl.autoclicker.*;
 import ac.polarctic.plugin.check.impl.emulation.EmulationHorizontal;
 import ac.polarctic.plugin.data.PlayerData;
 import ac.polarctic.plugin.data.processor.api.IProcessor;
@@ -43,7 +42,11 @@ public class CheckProcessor extends IProcessor {
                 new EmulationHorizontal(playerData),
 
                 new AutoClickerA(playerData),
-                new AutoClickerB(playerData)
+                new AutoClickerB(playerData),
+                new AutoClickerC(playerData),
+                new AutoClickerD(playerData),
+                new AutoClickerE(playerData),
+                new AutoClickerF(playerData)
         );
 
         this.packetChecks = this.checks.stream().filter(check -> check instanceof PacketCheck)

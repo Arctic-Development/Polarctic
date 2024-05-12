@@ -3,7 +3,6 @@ package ac.polarctic.plugin.check.impl.autoclicker;
 import ac.polarctic.plugin.check.api.annotation.CheckInformation;
 import ac.polarctic.plugin.check.api.types.PacketCheck;
 import ac.polarctic.plugin.data.PlayerData;
-import ac.polarctic.plugin.utilities.MathUtil;
 import ac.polarctic.plugin.utilities.PacketUtil;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;

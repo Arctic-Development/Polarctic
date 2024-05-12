@@ -2,7 +2,9 @@ package ac.polarctic.plugin.data;
 
 import ac.polarctic.plugin.data.processor.CheckProcessor;
 import ac.polarctic.plugin.data.processor.TrackerProcessor;
+import ac.polarctic.plugin.data.tracker.AttributeTracker;
 import ac.polarctic.plugin.data.tracker.PositionTracker;
+import ac.polarctic.plugin.data.tracker.RotationTracker;
 import ac.polarctic.plugin.data.tracker.api.PlayerTracker;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
@@ -32,6 +34,8 @@ public class PlayerData {
 
     private final List<PlayerTracker> playerTrackers = new ArrayList<>();
     private final PositionTracker positionTracker = new PositionTracker(this);
+    private final AttributeTracker attributeTracker = new AttributeTracker(this);
+    private final RotationTracker rotationTracker = new RotationTracker(this);
 
     private final CheckProcessor checkProcessor = new CheckProcessor(this);
     private final TrackerProcessor trackerProcessor = new TrackerProcessor(this);

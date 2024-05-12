@@ -30,7 +30,7 @@ public abstract class Check {
     private final int minVL;
     private final String name;
 
-    protected Check(PlayerData playerData) {
+    public Check(PlayerData playerData) {
         this.playerData = playerData;
         this.checkInformation = getClass().getAnnotation(CheckInformation.class);
         this.experimental = getClass().isAnnotationPresent(Experimental.class);
@@ -54,7 +54,7 @@ public abstract class Check {
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "" +
                     "/tp " + playerData.getPlayer().getName()));
             textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder("Click to teleport to the player.").create()));
+                    new ComponentBuilder(info + "\n" + "\nClick to teleport to the player.").create()));
             Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(textComponent));
 
         }

@@ -22,8 +22,8 @@ public class PositionTracker extends PlayerTracker {
 
     private double x, y, z, lastX, lastY, lastZ;
     private double deltaX, deltaY, deltaZ, deltaXZ, lastDeltaX, lastDeltaY, lastDeltaZ, lastDeltaXZ;
-    private int ticksSincePosition;
-    private boolean clientOnGround, lastClientOnGround;
+    private int ticksSincePosition, lastTicksSincePosition;
+    private boolean clientOnGround, lastClientOnGround, lastLastClientOnGround;
     private float slipperiness, lastSlipperiness, lastLastSlipperiness;
 
     public PositionTracker(PlayerData data) {
@@ -46,8 +46,12 @@ public class PositionTracker extends PlayerTracker {
 
        this.lastDeltaXZ = this.deltaXZ;
 
+       this.lastTicksSincePosition = this.ticksSincePosition;
+       this.ticksSincePosition++;
+
        if(PacketUtil.isPosition(event.getPacketType())) {
            final Location location = wrapper.getLocation();
+           this.ticksSincePosition = 0;
 
            this.x = location.getX();
            this.y = location.getY();
@@ -60,6 +64,7 @@ public class PositionTracker extends PlayerTracker {
            this.deltaXZ = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
        }
 
+       this.lastLastClientOnGround = this.lastClientOnGround;
        this.lastClientOnGround = this.clientOnGround;
        this.clientOnGround = wrapper.isOnGround();
 
@@ -93,11 +98,7 @@ public class PositionTracker extends PlayerTracker {
 
     @Override
     public void onPostReceive(PacketReceiveEvent event) {
-        if(PacketUtil.isFlying(event.getPacketType())) {
-            this.ticksSincePosition++;
-            if(PacketUtil.isPosition(event.getPacketType())) {
-                this.ticksSincePosition = 0;
-            }
-        }
+
     }
+
 }

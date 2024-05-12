@@ -5,7 +5,7 @@ import ac.polarctic.plugin.check.api.types.EntityInteractionCheck;
 import ac.polarctic.plugin.check.api.types.MovementCheck;
 import ac.polarctic.plugin.check.api.types.PacketCheck;
 import ac.polarctic.plugin.check.api.types.RotationCheck;
-import ac.polarctic.plugin.check.impl.move.MoveXZ;
+import ac.polarctic.plugin.check.impl.emulation.EmulationHorizontal;
 import ac.polarctic.plugin.data.PlayerData;
 import ac.polarctic.plugin.data.processor.api.IProcessor;
 import ac.polarctic.plugin.utilities.PacketUtil;
@@ -15,7 +15,6 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -34,10 +33,12 @@ public class CheckProcessor extends IProcessor {
     private final Collection<? extends RotationCheck> rotationChecks;
     private Collection<? extends EntityInteractionCheck> entityInteractionChecks;
 
+
+
     public CheckProcessor(PlayerData playerData) {
         super(playerData);
         this.checks = Arrays.asList(
-                new MoveXZ(playerData)
+                new EmulationHorizontal(playerData)
         );
 
         this.packetChecks = this.checks.stream().filter(check -> check instanceof PacketCheck)
@@ -48,6 +49,8 @@ public class CheckProcessor extends IProcessor {
                 .contains(RotationCheck.class)).map(check -> (RotationCheck) check).collect(Collectors.toList());
         this.entityInteractionChecks = this.checks.stream().filter(check -> Arrays.asList(check.getClass().getInterfaces())
                 .contains(EntityInteractionCheck.class)).map(check -> (EntityInteractionCheck) check).collect(Collectors.toList());
+
+        this.handleTestingCheck();
     }
 
 
@@ -76,5 +79,10 @@ public class CheckProcessor extends IProcessor {
     @Override
     public void onSend(PacketSendEvent event) {
 
+    }
+
+    private void handleTestingCheck() {
+        if(this.checks.stream().anyMatch(Check::isTesting))
+            checks.removeIf(check -> !check.isTesting());
     }
 }

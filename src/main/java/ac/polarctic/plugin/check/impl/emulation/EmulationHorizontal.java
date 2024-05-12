@@ -22,19 +22,14 @@ import java.text.NumberFormat;
  * made on Hydro AC
  */
 
-@Testing
 @Experimental
 @CheckInformation(name = "Movement Validation XZ", minVL = 15)
 public class EmulationHorizontal extends Check implements MovementCheck {
-
-    private final PositionTracker positionTracker = playerData.getPositionTracker();
-    private final AttributeTracker attributeTracker = playerData.getAttributeTracker();
-
     private final VanillaMathImpl vanillaMath = new VanillaMathImpl();
+
     private final FastMathImpl fastMath = new FastMathImpl();
 
     private static final boolean[] BOOLEANS = {true, false};
-
 
     public EmulationHorizontal(PlayerData playerData) {
         super(playerData);

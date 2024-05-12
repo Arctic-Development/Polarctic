@@ -5,6 +5,9 @@ import ac.polarctic.plugin.check.api.annotation.Experimental;
 import ac.polarctic.plugin.check.api.annotation.Testing;
 import ac.polarctic.plugin.config.Config;
 import ac.polarctic.plugin.data.PlayerData;
+import ac.polarctic.plugin.data.tracker.ActionTracker;
+import ac.polarctic.plugin.data.tracker.AttributeTracker;
+import ac.polarctic.plugin.data.tracker.PositionTracker;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -30,11 +33,19 @@ public abstract class Check {
     private final int minVL;
     private final String name;
 
+    protected final ActionTracker actionTracker;
+    protected final PositionTracker positionTracker;
+    protected final AttributeTracker attributeTracker;
+
     public Check(PlayerData playerData) {
         this.playerData = playerData;
         this.checkInformation = getClass().getAnnotation(CheckInformation.class);
         this.experimental = getClass().isAnnotationPresent(Experimental.class);
         this.testing = getClass().isAnnotationPresent(Testing.class);
+
+        this.actionTracker = playerData.getActionTracker();
+        this.positionTracker = playerData.getPositionTracker();
+        this.attributeTracker = playerData.getAttributeTracker();
 
         this.minVL = checkInformation.minVL();
         this.name = checkInformation.name();

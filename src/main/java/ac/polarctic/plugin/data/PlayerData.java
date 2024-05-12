@@ -2,7 +2,11 @@ package ac.polarctic.plugin.data;
 
 import ac.polarctic.plugin.data.processor.CheckProcessor;
 import ac.polarctic.plugin.data.processor.TrackerProcessor;
-import ac.polarctic.plugin.data.tracker.*;
+import ac.polarctic.plugin.data.tracker.ActionTracker;
+import ac.polarctic.plugin.data.tracker.AttributeTracker;
+import ac.polarctic.plugin.data.tracker.PositionTracker;
+import ac.polarctic.plugin.data.tracker.RotationTracker;
+import ac.polarctic.plugin.data.tracker.VelocityTracker;
 import ac.polarctic.plugin.data.tracker.api.PlayerTracker;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;

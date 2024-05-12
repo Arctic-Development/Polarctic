@@ -6,6 +6,7 @@ import ac.polarctic.plugin.check.api.types.MovementCheck;
 import ac.polarctic.plugin.check.api.types.PacketCheck;
 import ac.polarctic.plugin.check.api.types.RotationCheck;
 import ac.polarctic.plugin.check.impl.autoclicker.*;
+import ac.polarctic.plugin.check.impl.badpackets.*;
 import ac.polarctic.plugin.check.impl.emulation.EmulationHorizontal;
 import ac.polarctic.plugin.data.PlayerData;
 import ac.polarctic.plugin.data.processor.api.IProcessor;
@@ -26,18 +27,17 @@ import java.util.stream.Collectors;
  * made on ac.polarctic.plugin.data.processor
  */
 public class CheckProcessor extends IProcessor {
-
     @Getter
     private final List<Check> checks;
     private final List<PacketCheck> packetChecks;
+
     private final Collection<? extends MovementCheck> movementChecks;
     private final Collection<? extends RotationCheck> rotationChecks;
-    private Collection<? extends EntityInteractionCheck> entityInteractionChecks;
-
-
+    private final Collection<? extends EntityInteractionCheck> entityInteractionChecks;
 
     public CheckProcessor(PlayerData playerData) {
         super(playerData);
+
         this.checks = Arrays.asList(
                 new EmulationHorizontal(playerData),
 
@@ -46,7 +46,15 @@ public class CheckProcessor extends IProcessor {
                 new AutoClickerC(playerData),
                 new AutoClickerD(playerData),
                 new AutoClickerE(playerData),
-                new AutoClickerF(playerData)
+                new AutoClickerF(playerData),
+
+                new BadPacketsA(playerData),
+                new BadPacketsB(playerData),
+                new BadPacketsC(playerData),
+                new BadPacketsD(playerData),
+                new BadPacketsE(playerData),
+                new BadPacketsF(playerData),
+                new BadPacketsG(playerData)
         );
 
         this.packetChecks = this.checks.stream().filter(check -> check instanceof PacketCheck)
@@ -60,9 +68,6 @@ public class CheckProcessor extends IProcessor {
 
         this.handleTestingCheck();
     }
-
-
-
 
     @Override
     public void onReceive(PacketReceiveEvent event) {
@@ -79,9 +84,6 @@ public class CheckProcessor extends IProcessor {
         }
 
         packetChecks.forEach(packetCheck -> packetCheck.onPacket(event));
-
-
-
     }
 
     @Override

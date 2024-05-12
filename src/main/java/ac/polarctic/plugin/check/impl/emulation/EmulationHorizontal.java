@@ -11,6 +11,7 @@ import ac.polarctic.plugin.check.impl.emulation.util.impl.VanillaMathImpl;
 import ac.polarctic.plugin.data.PlayerData;
 import ac.polarctic.plugin.data.tracker.AttributeTracker;
 import ac.polarctic.plugin.data.tracker.PositionTracker;
+import ac.polarctic.plugin.data.tracker.VelocityTracker;
 import ac.polarctic.plugin.utilities.mcp.MathHelper;
 import org.bukkit.Bukkit;
 
@@ -25,6 +26,7 @@ import java.text.NumberFormat;
 @Experimental
 @CheckInformation(name = "Movement Validation XZ", minVL = 15)
 public class EmulationHorizontal extends Check implements MovementCheck {
+
     private final VanillaMathImpl vanillaMath = new VanillaMathImpl();
 
     private final FastMathImpl fastMath = new FastMathImpl();
@@ -37,9 +39,9 @@ public class EmulationHorizontal extends Check implements MovementCheck {
 
     @Override
     public void onMove() {
-        // Initialize the lowest match offset
-        double lowestMatch = Double.MAX_VALUE;
         double motionXZ = positionTracker.getLastDeltaXZ();
+        double lowestMatch = Double.MAX_VALUE;
+        boolean isVelocity = false;
 
         final double deltaXZ = positionTracker.getDeltaXZ();
         final float tickFriction = positionTracker.isLastLastClientOnGround() ?
@@ -71,12 +73,11 @@ public class EmulationHorizontal extends Check implements MovementCheck {
                                                 double bruteforceX = lastDeltaX;// Initialize 'bruteforceX' with the player's last delta X
                                                 double bruteforceZ = lastDeltaZ; // Initialize 'bruteforceZ' with the player's last delta Z
 
-                                                        /*// Update 'bruteforceX' and 'bruteforceZ' if velocity is enabled and there are possible velocities
-                                                        if (velocity && !velocityTracker.getPossibleVelocities().isEmpty()) {
-                                                            bruteforceX = velocityTracker.peekVelocity().getX();
-                                                            bruteforceZ = velocityTracker.peekVelocity().getZ();
-                                                        }
-                                                        */
+                                                // Update 'bruteforceX' and 'bruteforceZ' if velocity is enabled and there are possible velocities
+                                                if (velocity && !velocityTracker.getVelocities().isEmpty()) {
+                                                    bruteforceX = velocityTracker.peek().getX();
+                                                    bruteforceZ = velocityTracker.peek().getZ();
+                                                }
 
                                                 float friction = 0.91F; // Initialize the friction factor
 
@@ -103,7 +104,6 @@ public class EmulationHorizontal extends Check implements MovementCheck {
                                                 if (sprinting && forward <= 0) {
                                                     continue; // Skip iteration if sprinting with non-positive forward value
                                                 }
-
 
                                                 // Apply modifiers to 'forward' and 'strafe' based on movement conditions
                                                 if (sneaking) {
@@ -152,27 +152,40 @@ public class EmulationHorizontal extends Check implements MovementCheck {
                                                 if (offset < lowestMatch) {
                                                     lowestMatch = offset;
                                                     motionXZ = Math.hypot(bruteforceX, bruteforceZ);
+                                                    isVelocity = velocity;
+
                                                 }
                                             }
                                         }
                                     }
                                 }
+
                             }
 
                         }
 
                     }
+
                 }
             }
         }
 
-        double zeroThreeTicks = positionTracker.getLastTicksSincePosition() * 0.03D;
-        double threshold = 1E-6 + zeroThreeTicks;
-        NumberFormat formatter = new DecimalFormat("#.######");
+        isVelocity = isVelocity || velocityTracker.getVelocityTicks() <= 2;
 
-        if(positionTracker.getDeltaXZ() > motionXZ + threshold && deltaXZ >= 0.1 + zeroThreeTicks) {
-            flag("delta=" + formatter.format(deltaXZ) + " motion=" + formatter.format(motionXZ) + " 00three=" + zeroThreeTicks);
-        }
+        final double zeroThreeTicks = positionTracker.getLastTicksSincePosition() * 0.03D;
+        final double threshold = 1E-5 + zeroThreeTicks;
+
+        final NumberFormat formatter = new DecimalFormat("#.######");
+        final boolean invalid = (positionTracker.getDeltaXZ() > motionXZ + threshold && !isVelocity)
+                || lowestMatch > threshold * 10D;
+
+        if (invalid && deltaXZ >= 0.1 + zeroThreeTicks && !velocityTracker.isConfirming()) {
+            if(++buffer > 2) {
+                buffer = Math.min(8, buffer);
+                flag("delta=" + formatter.format(deltaXZ) + " motion=" + formatter.format(motionXZ) + " 00three=" + zeroThreeTicks);
+            }
+
+        } else buffer = Math.max(0, buffer - 0.05D);
 
     }
 

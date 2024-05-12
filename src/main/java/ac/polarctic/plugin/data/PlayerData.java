@@ -2,10 +2,7 @@ package ac.polarctic.plugin.data;
 
 import ac.polarctic.plugin.data.processor.CheckProcessor;
 import ac.polarctic.plugin.data.processor.TrackerProcessor;
-import ac.polarctic.plugin.data.tracker.ActionTracker;
-import ac.polarctic.plugin.data.tracker.AttributeTracker;
-import ac.polarctic.plugin.data.tracker.PositionTracker;
-import ac.polarctic.plugin.data.tracker.RotationTracker;
+import ac.polarctic.plugin.data.tracker.*;
 import ac.polarctic.plugin.data.tracker.api.PlayerTracker;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
@@ -39,13 +36,12 @@ public class PlayerData {
     private final AttributeTracker attributeTracker = new AttributeTracker(this);
     private final RotationTracker rotationTracker = new RotationTracker(this);
     private final ActionTracker actionTracker = new ActionTracker(this);
+    private final VelocityTracker velocityTracker = new VelocityTracker(this);
 
     private final CheckProcessor checkProcessor = new CheckProcessor(this);
     private final TrackerProcessor trackerProcessor = new TrackerProcessor(this);
 
     private final TransactionConfirmatory transactionConfirmatory = new TransactionConfirmatory(this);
-
-
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
@@ -63,8 +59,4 @@ public class PlayerData {
         trackerProcessor.onSend(event);
 
     }
-
-
-
-
 }

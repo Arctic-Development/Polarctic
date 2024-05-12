@@ -8,6 +8,7 @@ import ac.polarctic.plugin.data.PlayerData;
 import ac.polarctic.plugin.data.tracker.ActionTracker;
 import ac.polarctic.plugin.data.tracker.AttributeTracker;
 import ac.polarctic.plugin.data.tracker.PositionTracker;
+import ac.polarctic.plugin.data.tracker.VelocityTracker;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -36,6 +37,7 @@ public abstract class Check {
     protected final ActionTracker actionTracker;
     protected final PositionTracker positionTracker;
     protected final AttributeTracker attributeTracker;
+    protected final VelocityTracker velocityTracker;
 
     public Check(PlayerData playerData) {
         this.playerData = playerData;
@@ -46,6 +48,7 @@ public abstract class Check {
         this.actionTracker = playerData.getActionTracker();
         this.positionTracker = playerData.getPositionTracker();
         this.attributeTracker = playerData.getAttributeTracker();
+        this.velocityTracker = playerData.getVelocityTracker();
 
         this.minVL = checkInformation.minVL();
         this.name = checkInformation.name();

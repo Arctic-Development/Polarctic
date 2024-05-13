@@ -64,7 +64,7 @@ public class VelocityTracker extends PlayerTracker {
         if (!PacketUtil.isFlying(event.getPacketType())) return;
 
         if (confirming && lastVelocity != null) {
-         //   this.velocities.add(this.lastVelocity);
+            //   this.velocities.add(this.lastVelocity);
         }
 
     }
